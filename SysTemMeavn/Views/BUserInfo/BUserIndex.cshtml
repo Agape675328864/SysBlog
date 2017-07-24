@@ -38,21 +38,22 @@
                 num_edge_entries: 2        //两侧首尾分页条目数
             });
 
-            
+
             $(".edit").click(function(){
                 var $this=$(this);
                 $.dialog({
                     id: 'msg',
                     title: '修改用户信息',
                     content: 'url:'+$this.attr("url"),
-                    width: 370,
-                    height: 270,
+                    width: 470,
+                    height: 490,
                     fixed: true,
                     drag: false,
                     resize: false,
                     max: false,
                     min: false,
-                    lock:true
+                    lock:true,
+                    scroll:false
                 });
             });
 
@@ -96,7 +97,7 @@
                         状态
                     </th>
                     <th>
-                       操作
+                        操作
                     </th>
                 </tr>
             </thead>
@@ -141,7 +142,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="6">
+                        <td colspan="7">
                             暂时没有您需要的数据！
                         </td>
                     </tr>
@@ -149,7 +150,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="6" id="Pagination"></td>
+                    <td colspan="7" id="Pagination"></td>
                 </tr>
             </tfoot>
         </table>

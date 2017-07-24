@@ -20,13 +20,14 @@ namespace SysTemMeavn.Controllers
             ViewBag.Count = list.Item2;
             ViewBag.NickName = NickName;
             ViewBag.Page = Page;
-            return View(list.Item1); 
+            return View(list.Item1);
         }
         /// <summary>
         /// 编辑获取用户信息
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
+        [HttpGet]
         public ActionResult EditUserInfo(int Id)
         {
             return View(B_UserInfo_Provider.GetUserInfoListById(Id.ToString()).FirstOrDefault());
@@ -36,11 +37,15 @@ namespace SysTemMeavn.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public ActionResult ModifyUserInfo(B_UserInfo model)
+        [HttpPost]
+        public ActionResult EditUserInfo(B_UserInfo model)
         {
-            if (B_UserInfo_Provider.UpdateUserInfo(model))
+            B_UserInfo NModel = B_UserInfo_Provider.GetUserInfoListById(model.Id.ToString()).FirstOrDefault();
+            NModel.Gender = model.Gender;
+            NModel.State = model.State;
+            if (B_UserInfo_Provider.UpdateUserInfo(NModel))
             {
-              return  Json(new { state = "y", info = "修改成功！" });
+                return Json(new { state = "y", info = "修改成功！" });
             }
             else
             {

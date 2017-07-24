@@ -39,12 +39,14 @@ namespace SysTemDAL
                            SET [Photo] = @Photo
                               ,[Gender] = @Gender
                               ,[BirthDay] = @BirthDay
+                              ,[State]=@State
                            WHERE Id=@Id";
             SqlParameter[] param ={
                                      new SqlParameter("@Photo", model.Photo),
                                      new SqlParameter("@Gender", model.Gender),
                                      new SqlParameter("@BirthDay", model.BirthDay),
-                                      new SqlParameter("@Id", model.Id),
+                                     new SqlParameter("@Id", model.Id),
+                                     new SqlParameter("@State",model.State)
                                    };
             return DBHelperDao.ExecuteNonQuery(sql, param) > 0;
         }

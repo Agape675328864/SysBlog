@@ -70,3 +70,12 @@ D:\Blog_SysTem\SysTemDAL\bin\Debug\SysTemModel.pdb
 D:\Blog_SysTem\SysTemDAL\obj\Debug\SysTemSDAL.csprojResolveAssemblyReference.cache
 D:\Blog_SysTem\SysTemDAL\obj\Debug\SysTemDAL.dll
 D:\Blog_SysTem\SysTemDAL\obj\Debug\SysTemDAL.pdb
+D:\SysBlog\SysTemDAL\bin\Debug\SysTemDAL.dll
+D:\SysBlog\SysTemDAL\bin\Debug\SysTemDAL.pdb
+D:\SysBlog\SysTemDAL\bin\Debug\SysTemCommHelper.dll
+D:\SysBlog\SysTemDAL\bin\Debug\SysTemModel.dll
+D:\SysBlog\SysTemDAL\bin\Debug\SysTemCommHelper.pdb
+D:\SysBlog\SysTemDAL\bin\Debug\SysTemModel.pdb
+D:\SysBlog\SysTemDAL\obj\Debug\SysTemSDAL.csprojResolveAssemblyReference.cache
+D:\SysBlog\SysTemDAL\obj\Debug\SysTemDAL.dll
+D:\SysBlog\SysTemDAL\obj\Debug\SysTemDAL.pdb

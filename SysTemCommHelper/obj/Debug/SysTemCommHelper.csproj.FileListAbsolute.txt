@@ -54,3 +54,10 @@ D:\Blog_SysTem\SysTemCommHelper\bin\Debug\SysTemModel.pdb
 D:\Blog_SysTem\SysTemCommHelper\obj\Debug\SysTemCommHelper.csprojResolveAssemblyReference.cache
 D:\Blog_SysTem\SysTemCommHelper\obj\Debug\SysTemCommHelper.dll
 D:\Blog_SysTem\SysTemCommHelper\obj\Debug\SysTemCommHelper.pdb
+D:\SysBlog\SysTemCommHelper\bin\Debug\SysTemCommHelper.dll
+D:\SysBlog\SysTemCommHelper\bin\Debug\SysTemCommHelper.pdb
+D:\SysBlog\SysTemCommHelper\bin\Debug\SysTemModel.dll
+D:\SysBlog\SysTemCommHelper\bin\Debug\SysTemModel.pdb
+D:\SysBlog\SysTemCommHelper\obj\Debug\SysTemCommHelper.csprojResolveAssemblyReference.cache
+D:\SysBlog\SysTemCommHelper\obj\Debug\SysTemCommHelper.dll
+D:\SysBlog\SysTemCommHelper\obj\Debug\SysTemCommHelper.pdb

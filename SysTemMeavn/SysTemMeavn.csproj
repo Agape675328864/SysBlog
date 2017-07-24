@@ -305,6 +305,9 @@
     <Content Include="lhgdialog\skins\igreen\igreen_s2.png" />
     <Content Include="lhgdialog\skins\jtop.css" />
     <Content Include="lhgdialog\skins\mac.css" />
+    <Content Include="mh_dialog\images\error.png" />
+    <Content Include="mh_dialog\images\success.png" />
+    <Content Include="mh_dialog\mh_dialog.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="Scripts\bootstrap.js" />

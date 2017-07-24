@@ -9,29 +9,27 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>修改用户</title>
+    <link href="~/css/manhua_bubbletips.css" rel="stylesheet" type="text/css" />
     <script src="~/scripts/jquery-1.7.1.min.js"></script>
     <link href="~/css/validate.css" rel="stylesheet" />
     <script src="~/scripts/validform_v5.3.2.js"></script>
-    <script type="text/javascript">
-        var api = frameElement.api, W = api.opener;
-        $(function () {
-            $("form:eq(0)").Validform({
-                tiptype: 3,
-                showAllError: true,
-                ajaxPost: true,
-                callback: function (data) {
-                    $.Hidemsg();
-                    alert(data.info);
-                    if (data.state == "y") {
-                        W.document.getElementById("form_BUserInfo").submit();
-                        api.close();
-
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="~/mh_dialog/mh_dialog.js" type="text/javascript"></script>
     <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .box{
+            width:270px;
+            height:270px;
+            position:absolute;
+            left:0;
+            right:0;
+            top:0;
+            bottom:0;
+            margin:auto;
+        }
+
         ul, li {
             list-style: none;
             line-height: 50px;
@@ -77,16 +75,18 @@
             height: 25px;
             line-height: 25px;
             border-radius: 3px;
+            width: 150px;
         }
-        .userImg *{
-            display:inline-block;
-            vertical-align:middle;
+
+        .userImg * {
+            display: inline-block;
+            vertical-align: middle;
         }
     </style>
 </head>
 <body>
-    <div>
-        @using (Html.BeginForm("ModifyUserInfo", "BUserInfo", @Model.Id, FormMethod.Post))
+    <div class="box">
+        @using (Html.BeginForm("EditUserInfo", "BUserInfo", @Model.Id, FormMethod.Post))
         {
             <ul>
                 <li>
@@ -95,19 +95,51 @@
                 <li class="userImg">
                     <label for="spec">用户头像：</label><img src="@Html.Raw(Consts.UserPhotoPath + Model.Photo)" width="50px" height="50px" />
                 </li>
-               
                 <li>
                     <label>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</label><select class="SelectStyle" name="Gender">
                         <option value="1" @Html.Raw(Model.Gender == 1 ? "selected=\"selected\"" : "")>男</option>
                         <option value="2" @Html.Raw(Model.Gender == 2 ? "selected=\"selected\"" : "")>女</option>
+                        <option value="2" @Html.Raw(Model.Gender == 0 ? "selected=\"selected\"" : "")>未知</option>
+                    </select>
+                </li>
+                <li>
+                    <label>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态：</label><select class="SelectStyle" name="State">
+                        <option value="1" @Html.Raw(Model.State == 1 ? "selected=\"selected\"" : "")>正常</option>
+                        <option value="0" @Html.Raw(Model.State == 0 ? "selected=\"selected\"" : "")>冻结</option>
                     </select>
                 </li>
                 <li>
                     <input type="submit" id="btnOK" class="btn-Bg" value="提 交" /><input type="button" class="btn-Bg" value="取 消" onclick="api.close();" />
-                </li> 
+                </li>
             </ul>
         }
     </div>
 
 </body>
+<script type="text/javascript">
+    var api = frameElement.api, W = api.opener;
+    $(function () {
+        $("form:eq(0)").Validform({
+            tiptype: 3,
+            showAllError: true,
+            ajaxPost: true,
+            callback: function (data) {
+                $.Hidemsg();
+
+                if (data.state == "y") {
+                    mh_dialogShow('mh_success', '成功!', 1, true);
+                    setTimeout(Hide, 1000);
+                } else {
+                    mh_dialogShow('mh_error', '失败!', 1, true);
+                    setTimeout(Hide, 1000);
+                }
+
+            }
+        });
+    });
+    function Hide() {
+        W.document.getElementById("form_BUserInfo").submit();
+        api.close();
+    }
+</script>
 </html>

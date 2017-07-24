@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SysTemBlogWebApi</name>
+    </assembly>
+    <members>
+        <member name="T:SysTemBlogWebApi.App_Start.BaseController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:SysTemBlogWebApi.App_Start.BaseController.B_UserInfoBase">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SysTemBlogWebApi.App_Start.BaseController.GetUserInfoBase">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SysTemBlogWebApi.App_Start.BaseController.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:SysTemBlogWebApi.App_Start.BaseController.RequestContent">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:SysTemBlogWebApi.Controllers.Blog_ArticleInfoController">
+            <summary>
+            发帖文章管理
+            </summary>
+        </member>
+        <member name="M:SysTemBlogWebApi.Controllers.Blog_ArticleInfoController.BlogArticleAdd">
+            <summary>
+            用户发帖
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SysTemBlogWebApi.Controllers.Blog_ArticleInfoController.GetArticleListInfo">
+            <summary>
+            获取发帖列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SysTemBlogWebApi.Controllers.Blog_ArticleInfoController.GetArticleModelInfo">
+            <summary>
+            根据文章id获取信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:SysTemBlogWebApi.Controllers.Blog_UserInfoController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SysTemBlogWebApi.Controllers.Blog_UserInfoController.GetUserInfo">
+            <summary>
+            获取登录用户信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SysTemBlogWebApi.Controllers.Blog_UserInfoController.UpdateUserInfo">
+            <summary>
+            修改用户信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SysTemBlogWebApi.Controllers.Blog_UserInfoController.ChangePwd">
+            <summary>
+            修改密码
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:SysTemBlogWebApi.Controllers.Blog_LoginController">
+            <summary>
+            登录
+            </summary>
+        </member>
+        <member name="M:SysTemBlogWebApi.Controllers.Blog_LoginController.Login">
+            <summary>
+            登录
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SysTemBlogWebApi.Controllers.Blog_LoginController.Out">
+            <summary>
+            退出
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SysTemBlogWebApi.Controllers.Blog_LoginController.SmsMsg">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:SysTemBlogWebApi.Controllers.Blog_RegistUserController">
+            <summary>
+            注册接口
+            </summary>
+        </member>
+        <member name="M:SysTemBlogWebApi.Controllers.Blog_RegistUserController.BlogUserReg">
+            <summary>
+            博客用户注册
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:SysTemBlogWebApi.Filter.BlogFiter">
+            <summary>
+            过滤器
+            </summary>
+        </member>
+        <member name="M:SysTemBlogWebApi.Filter.BlogFiter.OnActionExecuting(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            
+            </summary>
+            <param name="actionContext"></param>
+        </member>
+    </members>
+</doc>

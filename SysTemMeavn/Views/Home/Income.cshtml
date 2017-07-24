@@ -1,0 +1,173 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Income</title>
+
+    <script src="~/fullcalendar/js/jquery-1.9.1.min.js"></script>
+    <link href="~/fullcalendar/css/fullcalendar.css" rel="stylesheet" />
+    <script src="~/fullcalendar/js/fullcalendar.min.js"></script>
+    <script src="~/fullcalendar/js/jquery-ui-1.10.2.custom.min.js"></script>
+    <script src="~/Scripts/JavaScript1.js"></script>
+    <style type="text/css">
+        ul, li {
+            line-height: 50px;
+            list-style: none;
+        }
+
+        .txtBox {
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            height: 25px;
+            width: 130px;
+            padding: 0 5px;
+        }
+
+        .btn-Bg {
+            background: url(/images/bg_btn.png) repeat-x;
+            height: 25px;
+            line-height: 25px;
+            width: 80px;
+            border: none;
+            border-radius: 3px;
+            color: #fff;
+            margin-right: 30px;
+        }
+
+        #btnOK {
+            background-position-y: -250px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var idd;
+        var ev;
+        $(function () {
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                firstDay: 1,
+                editable: true,
+                timeFormat: 'HH:mm',
+                axisFormat: 'HH:mm',
+                //events: function (start, end, callback) {
+                //    $.getJSON("/handler/list", { "start": $.fullCalendar.formatDate(start, 'yyyy-MM-dd'), "end": $.fullCalendar.formatDate(end, 'yyyy-MM-dd'), "_": new Date().getMilliseconds() }, function (e) {
+                //        callback(e);
+                //    });
+                //}, //"/handler/list",
+                eventClick: function (event, jsEvent, view) {
+                    ev = event;
+                    idd = layer.open({
+                        type: 1,
+                        skin: 'layui-layer-demo', //样式类名
+                        closeBtn: 0, //不显示关闭按钮
+                        shift: 5,
+                        shadeClose: true, //开启遮罩关闭
+                        title: '编辑工作日程:',
+                        area: ['480px', '380px'],
+                        content: '<section id="edit"><ul><li><label for="Title">待办标题:</label><input type="text" id="title" name="title" class="txtBox" value="' + event.title + '" /></li><li><label for="start">待办时间:</label><input type="text" id="sdate" name="start" class="txtBox Wdate" value="' + $.fullCalendar.formatDate(event.start, 'yyyy-MM-dd HH:mm') + '" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\',readOnly:true})" style="width: 140px;" />-<input type="text" id="edate" name="end" class="txtBox Wdate" value="' + $.fullCalendar.formatDate(event.end, 'yyyy-MM-dd HH:mm') + '" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\',readOnly:true})" style="width: 140px;" /></li><li><label for="allDay">是否整天:</label><input type="checkbox" value="True"  id="allDay" name="allDay" ' + (event.allDay ? "checked=\"checked\"" : "") + ' style="margin:20px;"  /></li><li><label for="Con">待办内容:</label><textarea name="Content" id="Con">' + event.Content + '</textarea></li><li id="btnLi"><input type="submit" id="btnOK" onclick="edit(' + event.id + ');"  value="修 改" /><input type="reset" id="btnDel" value="删 除" onclick="del(' + event.id + ');" /></li></ul></section>'
+                    });
+                },
+                dayClick: function (date, allDay, jsEvent, view) {
+
+                    if (((new Date($.fullCalendar.formatDate(new Date(), 'yyyy-MM-dd')).getTime()) - (new Date($.fullCalendar.formatDate(date, 'yyyy-MM-dd')).getTime())) <= 0) {
+
+
+                        idd = layer.open({
+                            type: 1,
+                            skin: 'layui-layer', //样式类名
+                            closeBtn: 0, //不显示关闭按钮
+                            shift: 2,
+                            shadeClose: true, //开启遮罩关闭
+                            title: '添加工作日程:',
+                            area: ['480px', '380px'],
+                            content: '<section id="edit"><ul><li><label for="Title">待办标题:</label><input type="text" id="title" name="title" class="txtBox" /></li><li><label for="start">待办时间:</label><input type="text" id="sdate" name="start" class="txtBox Wdate" value="' + $.fullCalendar.formatDate(date, 'yyyy-MM-dd HH:mm') + '" onclick="WdatePicker({doubleCalendar:true,dateFmt:\'yyyy-MM-dd HH:mm\',readOnly:true,minDate:\'%y-%M-%d 00:00\'})" style="width: 140px;" />-<input type="text" id="edate" name="end" class="txtBox Wdate" onclick="WdatePicker({doubleCalendar:true,minDate:\'%y-%M-%d 00:00\',dateFmt:\'yyyy-MM-dd HH:mm\',readOnly:true})" style="width: 140px;" /></li><li><label for="allDay">是否整天:</label><input type="checkbox" value="True" id="allDay" name="allDay" checked="checked"  style="margin:20px;" /></li><li><label for="Con">待办内容:</label><textarea name="Content" class="txtBox" id="Con"></textarea></li><li id="btnLi"><input class="btn-Bg" type="submit" id="btnOK" value="提 交" onclick="add();" /><input type="reset" value="关 闭" class="btn-Bg" onclick="layer.closeAll();" /></li></ul></section>'
+                        });
+                    }
+                }
+
+                //,
+                //eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc) {
+                //    $.post("/handler/update", { title: '' + event.title + '', start: '' + $.fullCalendar.formatDate(event.start, 'yyyy-MM-dd HH:mm') + '', end: '' + $.fullCalendar.formatDate(event.end, 'yyyy-MM-dd HH:mm') + '', allDay: '' + event.allDay + '', Content: '' + event.Content + '', id: '' + event.id + '' }, function (e) {
+                //        if (e.status == "y") {
+                //            layer.close(idd);
+                //        } else {
+                //            alert("修改失败!");
+                //        }
+                //    }, "JSON");
+                //},
+                //eventResize: function (event, dayDelta, minuteDelta, revertFunc) {
+                //    $.post("/handler/update", { title: '' + event.title + '', start: '' + $.fullCalendar.formatDate(event.start, 'yyyy-MM-dd HH:mm') + '', end: '' + $.fullCalendar.formatDate(event.end, 'yyyy-MM-dd HH:mm') + '', allDay: '' + event.allDay + '', Content: '' + event.Content + '', id: '' + event.id + '' }, function (e) {
+                //        if (e.status == "y") {
+                //            layer.close(idd);
+                //        } else {
+                //            alert("修改失败!");
+                //        }
+                //    }, "JSON");
+                //}
+            });
+        });
+
+        function del(id) {
+            if (confirm("删除工作日程将不能恢复，您确定要删除吗？")) {
+                $.post("/handler/Delete/" + id, {}, function (e) {
+                    if (e.status == "y") {
+                        $("#calendar").fullCalendar("removeEvents", id);
+                        layer.close(idd);
+                    } else {
+                        alert("删除失败!");
+                    }
+                }, "JSON");
+            }
+        }
+        function add() {
+            var isall = false;
+            if (document.getElementById("allDay").checked) {
+                isall = true;
+            }
+
+            $.post("/handler/add", { Title: '' + $("#title").val() + '', start: '' + $("#sdate").val() + '', end: '' + $("#edate").val() + '', allDay: '' + isall + '', Content: '' + $("#Con").val() + '' }, function (e) {
+                if (e.status == "y") {
+                    $("#calendar").fullCalendar('refetchEvents');
+                    layer.close(idd);
+                } else {
+                    alert("添加失败!");
+                }
+            }, "JSON");
+        }
+        function edit(id) {
+            ev.id = id;
+            ev.title = $("#title").val();
+            ev.start = $("#sdate").val();
+            ev.end = $("#edate").val();
+            var isall = false;
+            if (document.getElementById("allDay").checked) {
+                isall = true;
+            }
+            ev.allDay = isall;
+            ev.Content = $("#Con").val();
+            $.post("/handler/update", { title: '' + ev.title + '', start: '' + ev.start + '', end: '' + ev.end + '', allDay: '' + isall + '', Content: '' + ev.Content + '', id: '' + ev.id + '' }, function (e) {
+                if (e.status == "y") {
+                    $("#calendar").fullCalendar('updateEvent', ev);
+                    layer.close(idd);
+                } else {
+                    alert("修改失败!");
+                }
+            }, "JSON");
+        }
+
+    </script>
+</head>
+<body>
+    <div id="calendar">
+    </div>
+</body>
+</html>

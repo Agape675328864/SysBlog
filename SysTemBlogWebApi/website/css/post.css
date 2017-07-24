@@ -1,0 +1,15 @@
+.post_title{
+    width: 100%;
+    height: 30px;
+    border-bottom: 1px solid #d5e6ed;
+}
+.p_title{
+    width: 100px;
+    height: 31px;
+    margin-bottom: -1px;
+    border: 1px solid #d5e6ed;
+    border-bottom: none;
+    text-align: center;
+    line-height: 32px;
+    background: #fff;
+}

@@ -1,0 +1,74 @@
+﻿/* CSS Document */
+
+/*   body,div,img,button,h2,h3,span,p,b{ margin:0; padding:0; border:none; font-family:"微软雅黑";}
+   ul,li{ list-style:none; margin:0; padding:0;}
+   img{ vertical-align:top;}
+   a{ text-decoration:none;}*/
+#top
+{
+    margin: 0 auto;
+    position: relative;
+    background: url(/images/top_bg.png);
+    height: 100px;
+}
+.top_l, .top_r
+{
+    height: 98px;
+    overflow: hidden;
+}
+.top_l
+{
+    width: 300px;
+    float: left;
+}
+.top_l img.user
+{
+    float: left;
+    padding: 0px 8px 0 10px;
+    margin-top: 5px;
+    border-right: 1px solid #c4d8f3;
+}
+.top_l_txt
+{
+    width: 170px;
+    height: 48px;
+    float: left;
+    margin: 8px 0 0 8px;
+}
+.top_l_txt p
+{
+    color: #555;
+    font-size: 12px;
+    line-height: 20px;
+}
+.top_r
+{
+    width: 500px;
+    float: right;
+}
+.top_r_btn
+{
+    width: 85px;
+    height: 28px;
+    float: right;
+    margin: 35px 40px 0 0;
+}
+.top_r_btn a
+{
+    width: 85px;
+    height: 28px;
+    line-height: 28px;
+    border: 1px solid #95b8e7;
+    color: #333;
+    background: #e6f0ff;
+    font-size: 12px;
+    text-align: center;
+    display: block;
+}
+.top_r_btn a:hover
+{
+    background: #95b8e7;
+    color: #fff;
+}
+
+

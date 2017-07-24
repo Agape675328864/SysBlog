@@ -1,0 +1,158 @@
+﻿@using SysTemCommHelper;
+@using SysTemModel;
+@model List<B_UserInfo>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>用户列表</title>
+    <link href="/jquery-easyui-1.4.3/themes/default/easyui.css" rel="stylesheet" type="text/css">
+    <link href="~/css/pagination.css" rel="stylesheet" />
+    <link href="~/css/table_layout.css" rel="stylesheet" />
+    <script src="~/scripts/jquery-1.7.1.min.js"></script>
+    <script src="~/scripts/jquery.pagination.js"></script>
+    <script src="~/lhgdialog/lhgdialog.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            $("#btnSearch").click(function () {
+                $("#Page").val("0");
+            });
+            var pageIndex = 0;     //页面索引初始值
+            var pageSize = 15;     //每页显示条数初始化，修改显示条数，修改这里即可
+
+            //分页，PageCount是总条目数，这是必选参数，其它参数都是可选
+            $("#Pagination").pagination(@ViewBag.Count, {
+                callback: function(index, jq){
+                    $("#Page").val(index);
+                    document.getElementsByTagName("form")[0].submit();
+                },
+                prev_text: '上一页',       //上一页按钮里text
+                next_text: '下一页',       //下一页按钮里text
+                items_per_page: 15,  //显示条数
+                num_display_entries: 5,    //连续分页主体部分分页条目数
+                current_page: @ViewBag.Page,   //当前页索引
+                num_edge_entries: 2        //两侧首尾分页条目数
+            });
+
+            
+            $(".edit").click(function(){
+                var $this=$(this);
+                $.dialog({
+                    id: 'msg',
+                    title: '修改用户信息',
+                    content: 'url:'+$this.attr("url"),
+                    width: 370,
+                    height: 270,
+                    fixed: true,
+                    drag: false,
+                    resize: false,
+                    max: false,
+                    min: false,
+                    lock:true
+                });
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <div>
+        <div style="border: 1px solid #95b8e7; padding: 5px; border-radius: 5px;">
+            @using (Html.BeginForm("BUserIndex", "BUserInfo", FormMethod.Post, new { id = "form_BUserInfo" }))
+            {
+                <input type="hidden" value="@ViewBag.Page" name="Page" id="Page" />
+                <label for="Order">
+                    用户昵称:
+                </label><input type="text" id="NickName" name="NickName" class="txtBox" value="@ViewBag.NickName" />
+                <input type="submit" id="btnSearch" value="搜 索" class="btnBg" />
+
+            }
+
+        </div>
+        <br />
+        <table border="0" class="table_layout">
+            <thead>
+                <tr>
+                    <th>
+                        用户昵称
+                    </th>
+                    <th>
+                        用户头像
+                    </th>
+                    <th>
+                        用户性别
+                    </th>
+                    <th>
+                        出生日期
+                    </th>
+                    <th>
+                        创建时间
+                    </th>
+                    <th>
+                        状态
+                    </th>
+                    <th>
+                       操作
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count > 0)
+                {
+                    foreach (B_UserInfo item in Model)
+                    {
+                        <tr>
+                            <td>@item.NickName</td>
+                            <td><img style="width:50px;height:50px;" src="@Html.Raw(Consts.UserPhotoPath + item.Photo)" /></td>
+                            <td>
+                                @if (item.Gender.Equals(1))
+                                {
+                                    <text>男</text>
+                                }
+                                else if (item.Gender.Equals(2))
+                                {
+                                    <text>女</text>
+                                }
+                                else
+                                {
+                                    <text>未知</text>
+                                }
+                            </td>
+                            <td>@Html.Raw(item.BirthDay?.ToString("yyyy-MM-dd"))</td>
+                            <td>@item.CreateTime.ToString("yyyy-MM-dd")</td>
+                            <td>
+                                @if (item.State.Equals(0))
+                                {
+                                    <text>冻结</text>
+                                }
+                                else if (item.State.Equals(1))
+                                {
+                                    <text>正常</text>
+                                }
+                            </td>
+                            <td><a class="edit" url="/BUserInfo/EditUserInfo/@item.Id">修改</a></td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">
+                            暂时没有您需要的数据！
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6" id="Pagination"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</body>
+</html>

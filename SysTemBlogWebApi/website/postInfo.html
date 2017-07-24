@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>详情页</title>
+    <link type="text/css" href="themes/css/v3/reset.css" rel="stylesheet">
+    <link type="text/css" href="themes/css/v3/public.css" rel="stylesheet">
+    <link type="text/css" href="themes/css/v3/register.css" rel="stylesheet">
+    <style>
+        .bx_content {
+            width: 1200px;
+            overflow: hidden;
+            margin: 30px auto;
+            background: #ffffff;
+            border: 1px solid #bdcfdd;
+            border-top: 2px solid #065792;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .userInfobox {
+            width: 299px;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 15px;
+        }
+
+        .userImg {
+            width: 240px;
+            height: 240px;
+            margin: 0 auto;
+            line-height: 240px;
+            text-align: center;
+        }
+
+        .userImg img {
+            width: 100%;
+        }
+
+        .userName {
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .contentInfo {
+            width: 900px;
+            box-sizing: border-box;
+            padding: 15px;
+            border-left: 1px solid #ddd;
+        }
+
+        .post_b_info {
+            padding: 20px 0 20px 0;
+        }
+
+        .post_title {
+            font-size: 16px;
+            color: #014c90;
+            font-weight: 700;
+        }
+
+        .f_post {
+            height: 30px;
+            line-height: 30px;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <div class="header">
+            <h1 class="png_bg">
+                <img src="images/logo.png" alt="">
+            </h1>
+
+            <a class="png_bg" href="index.html">返回主页</a>
+        </div>
+    </div>
+    <div class="bx_content">
+        <div class="userInfobox fl">
+            <div class="userImg text-center">
+                <img src="default.png" id="userImg" alt="">
+            </div>
+            <div class="userName text-center" id="userName">
+                userName
+            </div>
+        </div>
+        <div class="contentInfo fl">
+            <div class="f_post post_title createTime" id="postTitle"></div>
+            <div class="f_post postInfo createTime" id="createTime"></div>
+            <div class="post_b_info" id="postInfo"></div>
+        </div>
+    </div>
+    <script src="js/jquery-1.7.2.js"></script>
+    <!--<script src="js/monent.js"></script>-->
+    <script src="js/moment-with-locales.js"></script>
+    <script>
+        var postId = GetRequest().postId;
+        if (postId == undefined) {
+            window.location.href = 'index.html';
+        }
+
+        var _userImg = $('#userImg');
+        var _postTitle = $('#postTitle');
+        var _createTime = $('#createTime');
+        var _postInfo = $('#postInfo');
+        
+
+        $.ajax({
+            url: 'http://xz.42doo.com/api/Blog_ArticleInfo/GetArticleModelInfo',
+            data: { 'ID': postId },
+            type: 'post',
+            dataType: 'json',
+            headers: {
+                "Authorization": getCookie('iDs'),
+            },
+            success: function (res) {
+                if (res.ResultBase.Result == 1) {
+                    var oData = res.B_Article;
+
+                    var createTime = oData.CreateTime;
+                    var postTitle = oData.Title;
+                    var userImg = oData.Picture;
+                    var Content = oData.Content;
+                    moment.locale('zh-cn'); //汉化
+                    _createTime.text(moment(createTime).startOf('day').fromNow());
+
+                    _userImg.attr('src', userImg);
+                    _postInfo.html(Content);
+                    _postTitle.text(postTitle);
+
+                } else {
+                    layer.msg(res.Msg, { icon: 2 });
+                }
+
+            }
+        })
+
+
+
+
+        function GetRequest() {
+            //url例子：XXX.aspx?ID=" + ID + "&Name=" + Name；  
+            var url = location.search; //获取url中"?"符以及其后的字串  
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1)//url中存在问号，也就说有参数。  
+            {
+                var str = url.substr(1);
+                strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+                }
+            }
+            return theRequest;
+        }
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return unescape(arr[2]);
+            else
+                return null;
+        }
+    </script>
+</body>
+
+</html>

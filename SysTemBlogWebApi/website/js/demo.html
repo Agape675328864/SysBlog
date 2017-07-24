@@ -1,0 +1,452 @@
+<html>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<head runat="server"></head>
+
+<h1>用JavaScript实现信息注册</h1>
+
+<script type="text/javascript">
+    function init() {
+
+        document.form1.username.focus();
+
+    }
+
+
+
+    function blu() {
+
+        var space = document.form1.username.value;
+
+        //var str = /^[\u4E00-\u9FA5\uf900-\ufa2d\w]/;
+
+        var str = /\w[a-zA-Z0-9_]*/;
+
+        if (space == "") {
+
+            var sp = document.getElementById("sp").innerHTML = "用户不能为空";
+
+        }
+
+        else if (!space.match(str)) {
+
+            document.getElementById("sp").innerHTML = "只能够输入英文、数字和下划线";
+
+            //alert("只能够输入英文、数字和下划线");
+
+            return false;
+
+        }
+
+        else {
+
+            document.getElementById("sp").innerHTML = "";
+
+        }
+
+
+
+    }
+
+
+
+    //输入密码，并判断密码是否一致
+
+    function funpsd() {
+
+        var psd = document.form1.psd.value
+
+        if (psd == "") {
+
+            document.getElementById("sp1").innerHTML = "密码不能为空";
+
+        }
+
+        else if (psd.length < 6 || psd.length > 15) {
+
+            document.getElementById("sp1").innerHTML = "密码不能小于6位或不能大于15位";
+
+        }
+
+        else if (isNaN(psd)) {
+
+            document.getElementById("sp1").innerHTML = "密码必须是数字";
+
+        }
+
+        else {
+
+            document.getElementById("sp1").innerHTML = "";
+
+        }
+
+    }
+
+    function funcpsd() {
+
+        var psd1 = document.form1.psd.value;
+
+        var psd2 = document.form1.cpsd.value;  //变量赋值在前
+
+        if (psd1 != psd2) {
+
+            document.getElementById("sp2").innerHTML = "密码不一致，请重新输入";
+
+            document.form1.psd.select();
+
+            //psd2="" //把变量清空，但document.form1.cpsd.value还是原来的值，并没有清空document.form1.cpsd.value的值
+
+            document.form1.cpsd.value = "";
+
+        }
+
+        else {
+
+            document.getElementById("sp2").innerHTML = "";
+
+        }
+
+    }
+
+
+
+
+
+    //邮箱验证
+
+
+
+
+
+    function funmail() {
+
+        var mail = document.form1.qq.value;
+
+        var re = /^[\w-]+(\.[\w]+)*@([\w-]+\.)+[a-zA-z]{2,7}$/;
+
+
+
+        if (mail == "") {
+
+            document.getElementById("sp3").innerHTML = "邮箱不能为空";
+
+            return false;
+
+        }
+
+        else if (!mail.match(re)) {
+
+            document.getElementById("sp3").innerHTML = "邮箱格式不正确";
+
+            //alert("这个不是电子邮件");
+
+            return false;
+
+        }
+
+        else {
+
+            document.getElementById("sp3").innerHTML = "";
+
+            return true;
+
+        }
+
+    }
+
+</script>
+
+
+
+<body onload="init();" onload="startTime()" id="a">
+
+    <div id="txt"></div>
+    <form name="form1" method="post" action="">
+
+        <div class="">
+            <label for="username">
+
+            用户：<input type="text" name="username" id="username" onblur="blu();"  value="" /><span id="sp"></span>
+
+            </label>
+
+        </div>
+
+        <div>
+
+            <label for="psd1">
+
+                密码：<input type="password" name="psd" id="psd1" onblur="funpsd();"  value="" /><span id="sp1"></span>
+
+                </label>
+
+        </div>
+
+        <div>
+
+            <label for="cpsd1">
+
+   确认密码：<input type="password" name="cpsd" id="cpsd1" onblur="funcpsd();" value="" /><span id="sp2"></span>
+
+  </label>
+
+        </div>
+
+        <div>
+
+            <label for="sex">
+
+   性别：<input type="radio" name="sex" value="男" checked="checked">男<input type="radio" name="sex" value="女">女
+
+  </label>
+
+        </div>
+
+        <div>
+
+            年龄：
+
+            <select name="sel">
+
+                <option value="18">18</option>
+
+                <option value="19">19</option>
+
+                <option value="20">20</option>
+
+                <option value="21">21</option>
+
+                <option value="22">22</option>
+
+                <option value="23">23</option>
+
+                <option value="24">24</option>
+
+                <option value="25">25</option>
+
+                <option value="26">26</option>
+
+                <option value="27">27</option>
+
+                <option value="28">28</option>
+
+                <option value="29">29</option>
+
+                <option value="30">30</option>
+
+                <option value="31">31</option>
+
+                <option value="32">32</option>
+
+                <option value="33">33</option>
+
+                
+
+                </select>
+
+        </div>
+
+        <div>
+
+            Mail:<input type="text" value="" name="qq" onblur="funmail();" /><span id="sp3"></span>
+
+        </div>
+
+
+
+    </form>
+
+
+
+    <style type="text/css">
+        #preview {
+            width: 180px;
+            height: 180px;
+            border: 1px solid #000;
+            overflow: hidden;
+        }
+
+        #imghead {
+            filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=image);
+        }
+    </style>
+
+
+
+    <script type="text/javascript">
+        //图片上传预览    IE是用了滤镜。
+
+        function previewImage(file) {
+
+            var MAXWIDTH = 180;
+
+            var MAXHEIGHT = 180;
+
+            var div = document.getElementById('preview');
+
+            if (file.files && file.files[0]) {
+
+                div.innerHTML = '<img id=imghead>';
+
+                var img = document.getElementById('imghead');
+
+                img.onload = function () {
+
+                    var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+
+                    img.width = rect.width;
+
+                    img.height = rect.height;
+
+                    //                 img.style.marginLeft = rect.left+'px';
+
+                    img.style.marginTop = rect.top + 'px';
+
+                }
+
+                var reader = new FileReader();
+
+                reader.onload = function (evt) { img.src = evt.target.result; }
+
+                reader.readAsDataURL(file.files[0]);
+
+            }
+
+            else //兼容IE
+
+            {
+
+                var sFilter = 'filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
+
+                file.select();
+
+                var src = document.selection.createRange().text;
+
+                div.innerHTML = '<img id=imghead>';
+
+                var img = document.getElementById('imghead');
+
+                img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+
+                var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+
+                status = ('rect:' + rect.top + ',' + rect.left + ',' + rect.width + ',' + rect.height);
+
+                div.innerHTML = "<div id=divhead style='width:" + rect.width + "px;height:" + rect.height + "px;margin-top:" + rect.top + "px;" + sFilter + src + "\"'></div>";
+
+            }
+
+        }
+
+        function clacImgZoomParam(maxWidth, maxHeight, width, height) {
+
+            var param = { top: 0, left: 0, width: width, height: height };
+
+            if (width > maxWidth || height > maxHeight) {
+
+                rateWidth = width / maxWidth;
+
+                rateHeight = height / maxHeight;
+
+
+
+                if (rateWidth > rateHeight) {
+
+                    param.width = maxWidth;
+
+                    param.height = Math.round(height / rateWidth);
+
+                } else {
+
+                    param.width = Math.round(width / rateHeight);
+
+                    param.height = maxHeight;
+
+                }
+
+            }
+
+
+
+            param.left = Math.round((maxWidth - param.width) / 2);
+
+            param.top = Math.round((maxHeight - param.height) / 2);
+
+            return param;
+
+        }
+    </script>
+
+    <div id="preview">
+
+        <img id="imghead" border=0 src="1.gif" width="180" height="180" />
+
+    </div>
+
+    <input type="file" onchange="previewImage(this)" />
+
+
+
+    <form id="form1" runat="server">
+
+
+
+        <div id="abc">
+
+            <div id="divCode" style="background-color:White; width:52px; height:16px; padding:5px; text-align:center; vertical-align:middle; letter-spacing:5px; border:solid 1px blue"><span></span><span></span><span></span><span></span></div>
+
+        </div>验证码：<input></input>
+
+
+
+
+
+        <div>
+
+            <input type="submit" value="注册" onclick="validteCode()" />
+
+            <input type="reset" value="重置" />
+
+        </div>
+
+    </form>
+
+</body>
+
+</html>
+
+
+
+<script>
+        function validteCode() {
+
+            var codes = new Array(4);       //
+
+            var colors = new Array("Red", "Green", "Gray", "Blue", "Maroon", "Aqua", "Fuchsia", "Lime", "Olive", "Silver");
+
+            for (var i = 0; i < codes.length; i++) {//
+
+                codes[i] = Math.floor(Math.random() * 10);
+
+            }
+
+            var spans = document.getElementById("divCode").all;
+
+            for (var i = 0; i < spans.length; i++) {
+
+                spans[i].innerHTML = codes[i];
+
+                spans[i].style.color = colors[Math.floor(Math.random() * 10)];    //
+
+
+
+            }
+
+
+
+        }
+
+        document.onload = validteCode();
+
+</script>

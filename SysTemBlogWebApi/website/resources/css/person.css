@@ -1,0 +1,38 @@
+body{
+    background-color: #f5f5f5;
+}
+#content{overflow:hidden;width: 1230px;margin: 0 auto;}
+.left{width:200px; margin-bottom:-3000px; padding-bottom:3000px; float:left;}
+
+.b_left_navbox{
+    overflow: hidden;
+    width: 100%;
+}
+.b_left_navbox li{
+    width: 100%;
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    cursor: pointer;
+    
+}
+.b_left_navbox li.active{
+    color:#45a5ff;
+}
+.b_left_navbox li:hover{
+    color: #45a5ff;
+}
+.dataEye{
+    position: static!important;
+}
+.loginbox{
+    margin-top: 0!important;
+}
+.register-box{
+    padding-top: 30px;
+    position: static!important;
+    margin: 0 auto;
+}
+.cell input{
+    width: 100%!important;
+}

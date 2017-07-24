@@ -1,0 +1,258 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>首页</title>
+    <link href="css/index.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="header">
+        <div class="head_content">
+            <div class="logo">
+                <img src="images/logo.png" alt="">
+            </div>
+
+            <div class="p_message" id="info">
+                <div class="p_img_box">
+                    <img src="images/1.jpg" id="imgHead" alt="">
+                </div>
+
+                <div class="b_usename">
+                    <a href="person.html" id="userName">userName</a>
+                </div>
+                <div class="b_logout">
+                    <a href="javascript:;" id="logout" style="color:#fff;">退出</a>
+                </div>
+            </div>
+            <div class="form_item" id="postBtn" style="float:right;padding-top:13px;margin-right:30px;">
+                <a href="post.html" style="min-width:0!important;">
+                    发贴
+                </a>
+            </div>
+            <div class="p_message" id="loginbtn">
+                <a href="login.html">登录</a>
+            </div>
+        </div>
+    </div>
+    <div class="content_body">
+        <div class="contant_header">
+            <h1 class="cta-header-title">
+                展示&nbsp;&&nbsp;发现<br>创造性的工作
+            </h1>
+            <div class="form_item">
+                <a href="register.html">
+                    注册
+                </a>
+            </div>
+        </div>
+        <div class="content_bg">
+            <div class="content_page" id="content_page">
+
+            </div>
+        </div>
+
+    </div>
+    <script src="js/jquery-1.7.2.js"></script>
+    <script src="js/echo.min.js"></script>
+    <script src="js/layer/layer.js"></script>
+    <script src="js/jquery.dotdotdot.min.js"></script>
+    <script>
+        $(function () {
+
+            var id = getCookie('iDs');
+            var info = $('#info');
+            var loginbtn = $('#loginbtn');
+            var PageSize = 30;
+            var PageIndex = 1;
+            var maxPageIndex = 1;
+            initInfo(id);
+            isLogin(info, loginbtn);
+
+            LoadPage(id, PageIndex, PageSize);
+
+            $('#logout').click(function () {
+                logout(id, info, loginbtn);
+            })
+            $(window).scroll(function () {
+                //当内容滚动到底部时加载新的内容
+                if ($(this).scrollTop() + $(window).height() + 20 >= $(document).height() && PageIndex < maxPageIndex) {
+                    var index = layer.load(0);
+                    PageIndex++;
+                    console.log(PageIndex);
+                    //当前要加载的页码
+                    LoadPage(id, PageIndex, PageSize);
+                }
+            });
+            function LoadPage(id, PageIndex, PageSize) {
+
+                var strHtml = '<div class="content_item">' +
+                    '<a href="postInfo.html?postId={{postId}}">' +
+                    '<div class="postImg">' +
+                    '<img src="images/loading.gif" class="content_img" data-echo="{{imgUrl}}">' +
+                    '</div>' +
+                    '<div class="info">' +
+                    '<div class="info_name">{{aTitle}}</div>' +
+                    '</div>' +
+                    '</a>' +
+                    '</div>';
+                $.ajax({
+                    url: 'http://xz.42doo.com/api/Blog_ArticleInfo/GetArticleListInfo',
+                    data: { 'PageIndex': PageIndex, 'PageSize': PageSize },
+                    type: 'post',
+                    dataType: 'json',
+                    headers: {
+                        "Authorization": getCookie('iDs'),
+                    },
+                    success: function (res) {
+                        var index = layer.load(0);
+                        if (res.ResultBase.Result == 1) {
+                            var oData = res.ArticleInfoList;
+                            maxPageIndex = Math.ceil(res.Count / PageSize);
+                            $.each(oData, function (index, obj) {
+                                var imgUrl = "";// obj.Picture;
+                                var title = obj.Title;
+                                var content = obj.Content;
+                                var Id = obj.Id;
+                                var _html = strHtml.replace(/{{imgUrl}}/g, imgUrl).replace(/{{aTitle}}/g, title).replace(/{{postId}}/g, Id);
+                                $('#content_page').append(_html);
+                            })
+
+                            Echo.init({
+                                offset: 0,
+                                throttle: 0
+                            });
+                            $('.info_name').dotdotdot();
+                            layer.closeAll();
+
+                        } else {
+                            layer.msg(res.Msg, { icon: 2 });
+                        }
+
+                    }
+                })
+            }
+        })
+
+        function LoadPage(id, PageIndex, PageSize) {
+            var strHtml = '<div class="content_item">' +
+                '<div class="postImg">' +
+                '<img src="images/loading.gif" class="content_img" data-echo="{{imgUrl}}">' +
+                '</div>' +
+                '<div class="info">' +
+                '<div class="info_name">{{aTitle}}</div>' +
+                '</div>' +
+                '</div>';
+            $.ajax({
+                url: 'http://xz.42doo.com/api/Blog_ArticleInfo/GetArticleListInfo',
+                data: { 'id': id, 'PageIndex': PageIndex, 'PageSize': PageSize },
+                type: 'post',
+                dataType: 'json',
+                headers: {
+                    "Authorization": getCookie('iDs'),
+                },
+                success: function (res) {
+                    if (res.ResultBase.Result == 1) {
+                        var oData = res.ArticleInfoList;
+                        maxPageIndex = Math.ceil(res.Count / PageSize);
+                        $.each(oData, function (index, obj) {
+                            var imgUrl = obj.Picture;
+                            var title = obj.Title;
+                            var content = obj.Content;
+                            var _html = strHtml.replace(/{{imgUrl}}/g, imgUrl).replace(/{{aTitle}}/g, title);
+                            $('#content_page').append(_html);
+                        })
+                        Echo.init({
+                            offset: 0,
+                            throttle: 0
+                        });
+                        $('.info_name').dotdotdot();
+                    } else {
+                        layer.msg(res.Msg, { icon: 2 });
+                    }
+                    PageIndex++;
+                }
+            })
+        }
+        function initInfo(id) {
+            var NickName = $('#userName');
+            var imgHead = $('#imgHead');
+            var info = $('#info');
+            var loginbtn = $('#loginbtn');
+            $.ajax({
+                url: 'http://xz.42doo.com/api/Blog_UserInfo/GetUserInfo',
+                data: { id: id },
+                type: 'post',
+                dataType: 'json',
+                headers: {
+                    "Authorization": getCookie('iDs'),
+                },
+                success: function (res) {
+                    if (res.Result == 1) {
+                        NickName.text(res.NickName);
+                        imgHead.attr('src', res.Photo);
+                    } else {
+                        loginbtn.show();
+                        info.hide();
+                        $('#postBtn').hide();
+                    }
+                }
+            })
+
+        }
+
+        function logout(Id, info, loginbtn) {
+            $.ajax({
+                url: 'http://xz.42doo.com/api/Blog_Login/Out',
+                data: { Id: Id },
+                type: 'post',
+                dataType: 'json',
+                headers: {
+                    "Authorization": getCookie('iDs'),
+                },
+                success: function (res) {
+                    if (res.Result == 1) {
+                        loginbtn.show();
+                        info.hide();
+                        $('#postBtn').hide();
+                    } else {
+                        layer.msg(res.msg, { icon: 2 });
+                    }
+                }
+            })
+        }
+        function isLogin(info, loginbtn) {
+            // 判断登录状态
+            if (getCookie('iDs')) {
+                info.show();
+                loginbtn.hide();
+                $('#postBtn').show();
+            } else {
+                loginbtn.show();
+                info.hide();
+                $('#postBtn').hide();
+            }
+        }
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return unescape(arr[2]);
+            else
+                return null;
+        }
+
+        // 删除cookies
+        function delCookie(name) {
+            var exp = new Date();
+            exp.setTime(exp.getTime() - 1);
+            var cval = getCookie(name);
+            if (cval != null)
+                document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+﻿@model SysTemModel.B_SysUser
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>博客管理后台</title>
+    <link href="~/css/login.css" rel="stylesheet" />
+    <script src="~/scripts/jquery-1.7.1.min.js"></script>
+    <script src="~/scripts/Validform_v5.3.2.js"></script>
+    <link href="~/css/validate.css" rel="stylesheet" />
+    <script src="~/lhgdialog/lhgdialog.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("form:eq(0)").Validform({
+                tiptype: function (msg) {
+                    $.dialog.tips(msg);
+
+                },
+                tipSweep: true,
+                ajaxPost: true,
+                callback: function (data) {
+                    if (data.state == "y") {
+                        location.href = "/Home";
+                    } else {
+                      //  alert(data.info);
+                    }
+                }
+            });
+
+            //            $("#hidurl").val(GetQueryString("ReturnUrl"));
+        });
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+    </script>
+</head>
+<body>
+    <div id="login_top">
+        <div id="login_top_logo">
+            博客后台登陆
+        </div>
+    </div>
+    <div id="login_box">
+        <div class="login_box">
+            <div class="login">
+                <h2>
+                    <img width="38px" height="36" src="~/images/logo.png" />博客后台登陆
+                </h2>
+                @using (Html.BeginForm("Index", "Login", FormMethod.Post))
+                {
+                    <span></span>
+                    <ul>
+                        <li class="txt">
+                            <img src="~/images/icon_admin.jpg" />
+                            <input type="text" class="text" placeholder="请输入用户名" name="SysName" value="@Model.SysName" autocomplete="off" datatype="*" nullmsg="请输入用户名！"  />
+                        </li>
+                        <li class="txt">
+                            <img src="~/images/icon_password.jpg" />
+                            <input type="password" class="text" placeholder="请输入密码" name="password" value="@Model.Password" datatype="*" nullmsg="请输入密码！" />
+                        </li>
+                        <li class="check">
+                            <input name="" type="checkbox" value="" />记住密码
+                        </li>
+                        <li class="btn">
+                            <input type="submit" value="登 录" />
+                        </li>
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>服务热线：400-8888-666</p>
+        <p>Copyright &copy; 2017 北京博客管理公司 版权所有</p>
+    </div>
+
+</body>
+</html>

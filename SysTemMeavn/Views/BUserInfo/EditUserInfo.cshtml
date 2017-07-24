@@ -1,0 +1,113 @@
+﻿@using SysTemModel;
+@using SysTemCommHelper;
+@model  B_UserInfo
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>修改用户</title>
+    <script src="~/scripts/jquery-1.7.1.min.js"></script>
+    <link href="~/css/validate.css" rel="stylesheet" />
+    <script src="~/scripts/validform_v5.3.2.js"></script>
+    <script type="text/javascript">
+        var api = frameElement.api, W = api.opener;
+        $(function () {
+            $("form:eq(0)").Validform({
+                tiptype: 3,
+                showAllError: true,
+                ajaxPost: true,
+                callback: function (data) {
+                    $.Hidemsg();
+                    alert(data.info);
+                    if (data.state == "y") {
+                        W.document.getElementById("form_BUserInfo").submit();
+                        api.close();
+
+                    }
+                }
+            });
+        });
+    </script>
+    <style type="text/css">
+        ul, li {
+            list-style: none;
+            line-height: 50px;
+        }
+
+        label {
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .txtBox {
+            border: 1px solid #c1dad7;
+            border-radius: 3px;
+            width: 150px;
+            height: 25px;
+            padding: 0 5px;
+        }
+
+        .txtNum {
+            width: 80px;
+            padding-right: 0;
+        }
+
+        .btn-Bg {
+            background: url(/images/bg_btn.png) repeat-x;
+            border: none;
+            border-radius: 3px;
+            height: 25px;
+            line-height: 25px;
+            width: 80px;
+            text-align: center;
+            color: #fff;
+            margin-right: 30px;
+            margin-left: 20px;
+        }
+
+        #btnOK {
+            background-position-y: -250px;
+        }
+
+        .SelectStyle {
+            border: 1px solid #c1dad7;
+            height: 25px;
+            line-height: 25px;
+            border-radius: 3px;
+        }
+        .userImg *{
+            display:inline-block;
+            vertical-align:middle;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm("ModifyUserInfo", "BUserInfo", @Model.Id, FormMethod.Post))
+        {
+            <ul>
+                <li>
+                    <label for="NickName">用户帐号：</label><input type="text" id="NickName" name="NickName" class="txtBox" value="@Model.NickName" datatype="*" nullmsg="请填写商品名称！" disabled="disabled" />
+                </li>
+                <li class="userImg">
+                    <label for="spec">用户头像：</label><img src="@Html.Raw(Consts.UserPhotoPath + Model.Photo)" width="50px" height="50px" />
+                </li>
+               
+                <li>
+                    <label>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</label><select class="SelectStyle" name="Gender">
+                        <option value="1" @Html.Raw(Model.Gender == 1 ? "selected=\"selected\"" : "")>男</option>
+                        <option value="2" @Html.Raw(Model.Gender == 2 ? "selected=\"selected\"" : "")>女</option>
+                    </select>
+                </li>
+                <li>
+                    <input type="submit" id="btnOK" class="btn-Bg" value="提 交" /><input type="button" class="btn-Bg" value="取 消" onclick="api.close();" />
+                </li> 
+            </ul>
+        }
+    </div>
+
+</body>
+</html>

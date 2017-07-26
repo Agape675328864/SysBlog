@@ -90,5 +90,41 @@ namespace SysTemDAL
             string sql = "SELECT * FROM dbo.B_Article WHERE Id=@Id";
             return DBHelperDao.GetList<B_Article>(sql, new SqlParameter("@Id", Id));
         }
+        /// <summary>
+        /// 当前用户id获取所以主题发帖信息
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public static List<B_Article> ArticleList(string ItemIds)
+        {
+            string sql = "SELECT * FROM dbo.B_Article WHERE UserId in (" + ItemIds + ")";
+            return DBHelperDao.GetList<B_Article>(sql, null);
+        }
+        /// <summary>
+        /// 获取当前用户回帖信息
+        /// </summary>
+        /// <param name="ItemIds"></param>
+        /// <returns></returns>
+        public static List<B_RepliesArticle> RepliesArticleList(string ItemIds)
+        {
+            string sql = "SELECT * FROM dbo.B_RepliesArticle WHERE UserId in (" + ItemIds + ")";
+            return DBHelperDao.GetList<B_RepliesArticle>(sql, null);
+        }
+        /// <summary>
+        /// 修改文章显示状态
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static bool UpdateAritcleStatus(B_Article model)
+        {
+            string sql = @"UPDATE [dbo].[B_Article]
+                           SET [State] = @State
+                           WHERE Id=@Id";
+            SqlParameter[] param ={
+                                     new SqlParameter("@Id", model.Id),
+                                     new SqlParameter("@State",model.State)
+                                   };
+            return DBHelperDao.ExecuteNonQuery(sql, param) > 0;
+        }
     }
 }

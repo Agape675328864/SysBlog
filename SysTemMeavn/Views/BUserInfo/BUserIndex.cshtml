@@ -1,6 +1,6 @@
 ﻿@using SysTemCommHelper;
 @using SysTemModel;
-@model List<B_UserInfo>
+@model List<B_UserInfoJson>
 @{
     Layout = null;
 }
@@ -94,6 +94,12 @@
                         创建时间
                     </th>
                     <th>
+                        发帖数量
+                    </th>
+                    <th>
+                        回帖数量
+                    </th>
+                    <th>
                         状态
                     </th>
                     <th>
@@ -104,7 +110,7 @@
             <tbody>
                 @if (Model.Count > 0)
                 {
-                    foreach (B_UserInfo item in Model)
+                    foreach (B_UserInfoJson item in Model)
                     {
                         <tr>
                             <td>@item.NickName</td>
@@ -124,7 +130,11 @@
                                 }
                             </td>
                             <td>@Html.Raw(item.BirthDay?.ToString("yyyy-MM-dd"))</td>
-                            <td>@item.CreateTime.ToString("yyyy-MM-dd")</td>
+                            <td>@Html.Raw(item.CreateTime?.ToString("yyyy-MM-dd"))</td>
+                            <td>
+                                @item.PostCount
+                            </td>
+                            <td>@item.RepliesCount</td>
                             <td>
                                 @if (item.State.Equals(0))
                                 {
@@ -142,7 +152,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="7">
+                        <td colspan="9">
                             暂时没有您需要的数据！
                         </td>
                     </tr>
@@ -150,7 +160,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="7" id="Pagination"></td>
+                    <td colspan="9" id="Pagination"></td>
                 </tr>
             </tfoot>
         </table>

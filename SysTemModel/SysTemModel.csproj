@@ -42,8 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="B_Article.cs" />
+    <Compile Include="B_RepliesArticle.cs" />
     <Compile Include="B_SysUser.cs" />
     <Compile Include="B_UserInfo.cs" />
+    <Compile Include="B_UserInfoJson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultModel\ResultBase.cs" />
     <Compile Include="ResultModel\ResultCode.cs" />

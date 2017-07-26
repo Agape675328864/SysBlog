@@ -400,6 +400,6 @@ D:\SysBlog\SysTemMeavn\bin\zh-Hans\EntityFramework.SqlServer.resources.dll
 D:\SysBlog\SysTemMeavn\bin\zh-Hans\Microsoft.AspNet.Identity.Core.resources.dll
 D:\SysBlog\SysTemMeavn\bin\zh-Hans\Microsoft.AspNet.Identity.Owin.resources.dll
 D:\SysBlog\SysTemMeavn\bin\zh-Hans\Microsoft.AspNet.Identity.EntityFramework.resources.dll
+D:\SysBlog\SysTemMeavn\obj\Debug\SysTemMeavn.csprojResolveAssemblyReference.cache
 D:\SysBlog\SysTemMeavn\obj\Debug\SysTemMeavn.dll
 D:\SysBlog\SysTemMeavn\obj\Debug\SysTemMeavn.pdb
-D:\SysBlog\SysTemMeavn\obj\Debug\SysTemMeavn.csprojResolveAssemblyReference.cache

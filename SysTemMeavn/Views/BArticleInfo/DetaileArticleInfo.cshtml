@@ -73,10 +73,10 @@
                 <li>
                     <label for="goods_name"> 文章内容:</label>@Html.Raw(B_ArticleModel.Content)
                 </li>
-                <li>
+                @*<li>
                     <label for="goods_name">标题图片:</label>
                     <img style="width:100%;height:100%;" src="@Html.Raw(Consts.ArticlePath +  B_ArticleModel.Picture)" />
-                </li>
+                </li>*@
                 <li>
                     <label for="goods_name"> 创建时间:</label>@Html.Raw(B_ArticleModel.CreateTime?.ToString("yyyy-MM-dd"))
                 </li>

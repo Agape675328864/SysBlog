@@ -9,12 +9,14 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>用户列表</title>
+    <link href="~/css/manhua_bubbletips.css" rel="stylesheet" type="text/css" />
     <link href="/jquery-easyui-1.4.3/themes/default/easyui.css" rel="stylesheet" type="text/css">
     <link href="~/css/pagination.css" rel="stylesheet" />
     <link href="~/css/table_layout.css" rel="stylesheet" />
     <script src="~/scripts/jquery-1.7.1.min.js"></script>
     <script src="~/scripts/jquery.pagination.js"></script>
     <script src="~/lhgdialog/lhgdialog.min.js"></script>
+    <script src="~/mh_dialog/mh_dialog.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
             $(".detiale").click(function () {
@@ -33,7 +35,16 @@
                     lock: true
                 });
             });
-
+            $(".SelectStyle").change(function() {
+                var $this=$(this);
+                $.post("/BArticleInfo/UpdateArticleS/"+$this.attr("Bid"),{"state":$this.val()},function(e){
+                    if(e.state=="y"){
+                        mh_dialogShow('mh_success', '成功!', 2, true);
+                    } else {
+                        mh_dialogShow('mh_error', '失败!', 2, true);
+                    }
+                },"json");
+            });
 
             $("#btnSearch").click(function () {
                 $("#Page").val("0");
@@ -54,6 +65,8 @@
                 current_page: @ViewBag.Page,   //当前页索引
                 num_edge_entries: 2        //两侧首尾分页条目数
             });
+
+
         });
     </script>
 </head>
@@ -81,9 +94,9 @@
                     <th>
                         内容
                     </th>
-                    <th>
-                        标题图
-                    </th>
+                    @*<th>
+                            标题图
+                        </th>*@
                     <th>
                         状态
                     </th>
@@ -103,18 +116,14 @@
                         <tr>
                             <td title="@item.Title">@Html.Raw(item.Title.Length > 5 ? item.Title.Substring(0, 4) : item.Title)</td>
                             <td><a class="detiale" url="/BArticleInfo/DetaileArticleInfo/@item.Id">进入详情</a></td>
+                            @*<td>
+                                    <img style="width:30px;height:30px;" src="@Html.Raw(Consts.ArticlePath +  item.Picture)" />
+                                </td>*@
                             <td>
-                                <img style="width:30px;height:30px;" src="@Html.Raw(Consts.ArticlePath +  item.Picture)" />
-                            </td>
-                            <td>
-                                @if (item.State.Equals(0))
-                                {
-                                    <text>显示</text>
-                                }
-                                else if (item.State.Equals(1))
-                                {
-                                    <text>不显示</text>
-                                }
+                                <select class="SelectStyle" Bid="@item.Id" name="State">
+                                    <option value="0" @Html.Raw(item.State == 0 ? "selected=\"selected\"" : "")>显示</option>
+                                    <option value="1" @Html.Raw(item.State == 1 ? "selected=\"selected\"" : "")>不显示</option>
+                                </select>
                             </td>
                             <td>@Html.Raw(item.CreateTime?.ToString("yyyy-MM-dd"))</td>
                             <td>@item.Check</td>

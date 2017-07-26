@@ -13,7 +13,6 @@ namespace SysTemMeavn.Controllers
         // GET: BArticleInfo
         public ActionResult BArticleIndex()
         {
-            
             string Title = Request.Form["Title"];
             int Page = Convert.ToInt32(Request.Form["Page"] ?? "0");
             string fiter = " State in (0,1)";
@@ -37,6 +36,18 @@ namespace SysTemMeavn.Controllers
             List<B_Article> list = B_Article_Provider.ArticleList(Id);
             return View(list);
         }
+        public ActionResult UpdateArticleS(int id, int state)
+        {
+            B_Article model = new B_Article() { Id = id, State = state };
+            if (B_Article_Provider.UpdateAritcleStatus(model))
+            {
+                return Json(new { state = "y", info = "修改成功！" });
+            }
+            else
+            {
+                return Json(new { state = "y", info = "修改成功！" });
+            }
 
+        }
     }
 }

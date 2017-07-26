@@ -38,6 +38,5 @@ D:\Blog_SysTem\SysTemModel\obj\Debug\SysTemModel.dll
 D:\Blog_SysTem\SysTemModel\obj\Debug\SysTemModel.pdb
 D:\SysBlog\SysTemModel\bin\Debug\SysTemModel.dll
 D:\SysBlog\SysTemModel\bin\Debug\SysTemModel.pdb
-D:\SysBlog\SysTemModel\obj\Debug\SysTemModel.csprojResolveAssemblyReference.cache
 D:\SysBlog\SysTemModel\obj\Debug\SysTemModel.dll
 D:\SysBlog\SysTemModel\obj\Debug\SysTemModel.pdb

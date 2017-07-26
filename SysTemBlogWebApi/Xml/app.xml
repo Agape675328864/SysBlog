@@ -4,8 +4,8 @@
 <Aliyun>
   <!--阿里大鱼短信发送接口-->
   <SmsUrl>http://dysmsapi.aliyuncs.com/SendSms/</SmsUrl>
-  <AccessKeyId>LTAI1ME0WFTFBPvW</AccessKeyId>
-  <AccessKeySecret>Q6xzT1mWvlgRQoifOfdsHF7owcSngj</AccessKeySecret>
+  <AccessKeyId></AccessKeyId>
+  <AccessKeySecret></AccessKeySecret>
   <Version>2017-05-25</Version>
 </Aliyun>
 

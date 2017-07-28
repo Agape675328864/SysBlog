@@ -50,6 +50,37 @@ namespace SysTemDAL
             return DBHelperDao.ExecuteNonQuery(sql, param) > 0;
         }
         /// <summary>
+        /// 回帖列表
+        /// </summary>
+        /// <param name="PageIndex"></param>
+        /// <param name="PageSize"></param>
+        /// <param name="fiter"></param>
+        /// <returns></returns>
+        public static Tuple<List<RepliesArticleTemp>, int> RepliesArticleTemp(int PageIndex, int PageSize, string fiter = " 1=1")
+        {
+            string sql = ";WITH tab1 AS (SELECT ROW_NUMBER() OVER(ORDER BY t.CreateTime DESC) AS row_num,t.* FROM (SELECT re.UserId,re.id,re.ArticleId,re.Contents,re.CreateTime,re.State,ar.Title,us.NickName FROM dbo.B_RepliesArticle AS re LEFT JOIN dbo.B_Article AS ar ON ar.id=re.ArticleId JOIN dbo.B_UserInfo AS us ON us.Id=re.UserId WHERE {0}) AS t) SELECT * FROM tab1 WHERE row_num BETWEEN @PageIndex AND @PageSize";
+            List<SqlParameter> ParaList = new List<SqlParameter>();
+
+            ParaList.Add(new SqlParameter("@PageIndex", (PageSize * (PageIndex - 1) + 1)));
+            ParaList.Add(new SqlParameter("@PageSize", PageSize * PageIndex));
+            string TotalSql = ";WITH tab1 AS (SELECT COUNT(1) AS num FROM dbo.B_RepliesArticle AS re LEFT JOIN dbo.B_Article AS ar ON ar.id=re.ArticleId JOIN dbo.B_UserInfo AS us ON us.Id=re.UserId WHERE {0}) SELECT * FROM tab1 ";
+            if (!string.IsNullOrEmpty(fiter))
+            {
+                sql = string.Format(sql, fiter);
+                TotalSql = string.Format(TotalSql, fiter);
+            }
+            else
+            {
+                sql = string.Format(sql, "");
+                TotalSql = string.Format(TotalSql, "");
+            }
+
+            int totalcount = DBHelperDao.ExecuteScalar(TotalSql, ParaList) == null ? 0 : int.Parse(DBHelperDao.ExecuteScalar(TotalSql, ParaList).ToString());
+            Tuple<List<RepliesArticleTemp>, int> TupleModel = new Tuple<List<RepliesArticleTemp>, int>(DBHelperDao.GetList<RepliesArticleTemp>(sql, ParaList), totalcount);
+            return TupleModel;
+        }
+
+        /// <summary>
         /// 获取发帖列表
         /// </summary>
         /// <param name="PageIndex"></param>
@@ -118,6 +149,22 @@ namespace SysTemDAL
         public static bool UpdateAritcleStatus(B_Article model)
         {
             string sql = @"UPDATE [dbo].[B_Article]
+                           SET [State] = @State
+                           WHERE Id=@Id";
+            SqlParameter[] param ={
+                                     new SqlParameter("@Id", model.Id),
+                                     new SqlParameter("@State",model.State)
+                                   };
+            return DBHelperDao.ExecuteNonQuery(sql, param) > 0;
+        }
+        /// <summary>
+        /// 修改回帖显示状态
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static bool UpdateReAritcleStatus(B_RepliesArticle model)
+        {
+            string sql = @"UPDATE [dbo].[B_RepliesArticle]
                            SET [State] = @State
                            WHERE Id=@Id";
             SqlParameter[] param ={

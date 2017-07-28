@@ -25,5 +25,15 @@ namespace SysTemModel
         /// 回帖内容
         /// </summary>
         public string Contents { get; set; }
+        /// <summary>
+        /// 回复 0：显示 1：不显示
+        /// </summary>
+        public int State { get; set; }
+    }
+
+    public class RepliesArticleTemp : B_RepliesArticle
+    {
+        public string Title { get; set; }
+        public string NickName { get; set; }
     }
 }

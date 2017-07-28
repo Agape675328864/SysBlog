@@ -1,14 +1,14 @@
 ﻿@using SysTemModel;
-@using SysTemCommHelper;
-@model List<B_Article>
+@model List<RepliesArticleTemp>
 @{
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>主题列表</title>
+    <title>回复列表</title>
     <link href="~/css/manhua_bubbletips.css" rel="stylesheet" type="text/css" />
     <link href="/jquery-easyui-1.4.3/themes/default/easyui.css" rel="stylesheet" type="text/css">
     <link href="~/css/pagination.css" rel="stylesheet" />
@@ -37,7 +37,7 @@
             });
             $(".SelectStyle").change(function() {
                 var $this=$(this);
-                $.post("/BArticleInfo/UpdateArticleS/"+$this.attr("Bid"),{"state":$this.val()},function(e){
+                $.post("/RepliesArticle/UpdateReArticleS/"+$this.attr("Bid"),{"state":$this.val()},function(e){
                     if(e.state=="y"){
                         mh_dialogShow('mh_success', '成功!', 2, true);
                     } else {
@@ -45,13 +45,11 @@
                     }
                 },"json");
             });
-
             $("#btnSearch").click(function () {
                 $("#Page").val("0");
             });
             var pageIndex = 0;     //页面索引初始值
             var pageSize = 15;     //每页显示条数初始化，修改显示条数，修改这里即可
-
             //分页，PageCount是总条目数，这是必选参数，其它参数都是可选
             $("#Pagination").pagination(@ViewBag.Count, {
                 callback: function(index, jq){
@@ -65,22 +63,22 @@
                 current_page: @ViewBag.Page,   //当前页索引
                 num_edge_entries: 2        //两侧首尾分页条目数
             });
-
-
         });
     </script>
 </head>
 <body>
     <div>
         <div style="border: 1px solid #95b8e7; padding: 5px; border-radius: 5px;">
-            @using (Html.BeginForm("BArticleIndex", "BArticleInfo", FormMethod.Post, new { id = "form_BArticleInfo" }))
+            @using (Html.BeginForm("RepliesArticleIndex", "RepliesArticle", FormMethod.Post, new { id = "form_BArticleInfo" }))
             {
                 <input type="hidden" value="@ViewBag.Page" name="Page" id="Page" />
                 <label for="Order">
                     文章标题:
                 </label><input type="text" id="Title" name="Title" class="txtBox" value="@ViewBag.Title" />
+                <label for="Order">
+                    用户昵称:
+                </label><input type="text" id="NickName" name="NickName" class="txtBox" value="@ViewBag.NickName" />
                 <input type="submit" id="btnSearch" value="搜 索" class="btnBg" />
-
             }
 
         </div>
@@ -94,46 +92,44 @@
                     <th>
                         主题内容
                     </th>
-                    @*<th>
-                            标题图
-                        </th>*@
+                    <th>
+                        回复内容
+                    </th>
+                    <th>
+                        回帖人
+                    </th>
                     <th>
                         状态
                     </th>
                     <th>
-                        创建时间
-                    </th>
-                    <th>
-                        查看次数 热度
+                        回帖时间
                     </th>
                 </tr>
             </thead>
             <tbody>
                 @if (Model.Count > 0)
                 {
-                    foreach (B_Article item in Model)
+                    foreach (RepliesArticleTemp item in Model)
                     {
                         <tr>
                             <td title="@item.Title">@Html.Raw(item.Title.Length > 5 ? item.Title.Substring(0, 4) : item.Title)</td>
-                            <td><a class="detiale" url="/BArticleInfo/DetaileArticleInfo/@item.Id">进入详情</a></td>
-                            @*<td>
-                                    <img style="width:30px;height:30px;" src="@Html.Raw(Consts.ArticlePath +  item.Picture)" />
-                                </td>*@
+                            <td><a class="detiale" url="/BArticleInfo/DetaileArticleInfo/@item.ArticleId">进入详情</a></td>
+                            <td>@item.Contents</td>
+                            <td>@item.NickName</td>
                             <td>
                                 <select class="SelectStyle" Bid="@item.Id" name="State">
                                     <option value="0" @Html.Raw(item.State == 0 ? "selected=\"selected\"" : "")>显示</option>
                                     <option value="1" @Html.Raw(item.State == 1 ? "selected=\"selected\"" : "")>不显示</option>
                                 </select>
                             </td>
-                            <td>@Html.Raw(item.CreateTime?.ToString("yyyy-MM-dd"))</td>
-                            <td>@item.Check</td>
+                            <td>@Html.Raw(item.CreateTime.ToString("yyyy-MM-dd"))</td>
                         </tr>
                     }
                 }
                 else
                 {
                     <tr>
-                        <td colspan="6">
+                        <td colspan="7">
                             暂时没有您需要的数据！
                         </td>
                     </tr>
@@ -141,7 +137,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="6" id="Pagination"></td>
+                    <td colspan="7" id="Pagination"></td>
                 </tr>
             </tfoot>
         </table>

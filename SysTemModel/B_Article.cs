@@ -50,6 +50,14 @@ namespace SysTemModel
         /// 查看次数 热度
         /// </summary>
         public int Check { get; set; }
+        /// <summary>
+        /// 帖子类型名
+        /// </summary>
+        public string TypeName { get; set; }
+        /// <summary>
+        /// 类型id
+        /// </summary>
+        public int TypeId { get; set; }
     }
     public class ArticleModel
     {
@@ -62,7 +70,7 @@ namespace SysTemModel
     /// </summary>
     public class ArticleRoot
     {
-        public List<ArticleInfo> ArticleInfoList { get; set; }
+        public object ArticleInfoList { get; set; }
         public int Count { get; set; }
         public ResultBase ResultBase { get; set; }
 
@@ -78,18 +86,34 @@ namespace SysTemModel
         /// <summary>
         /// 帖子内容
         /// </summary>
-        //public string Content { get; set; }
+        public string Content { get; set; }
         /// <summary>
         /// 帖子图片
         /// </summary>
-        public string Picture { get; set; }
+        //public string Picture { get; set; }
         /// <summary>
         /// 发帖时间
         /// </summary>
         public string CreateTime { get; set; }
         /// <summary>
-        /// 查看次数 热度
+        /// 查看次数 热度（浏览次数）
         /// </summary>
         public int Check { get; set; }
+        /// <summary>
+        /// 评论数量
+        /// </summary>
+        public int RepliesCount { get; set; }
+        /// <summary>
+        /// 发帖用户
+        /// </summary>
+        public string NickName { get; set; }
+        /// <summary>
+        /// 帖子类型名
+        /// </summary>
+        public string TypeName { get; set; }
+        /// <summary>
+        /// 用户头像
+        /// </summary>
+        public string Photo { get; set; }
     }
 }

@@ -105,6 +105,18 @@ namespace SysTemDAL
             string sql = "select * from B_UserInfo where Id=@Id";
             return DBHelperDao.GetList<B_UserInfo>(sql, new SqlParameter("@Id", Id));
         }
+
+        /// <summary>
+        /// 根据用户Id集合获取用户信息
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public static List<B_UserInfo> GetUserInfoListUserIds(string Id)
+        {
+            string sql = "select * from B_UserInfo where Id in (" + Id + ")";
+            return DBHelperDao.GetList<B_UserInfo>(sql, null);
+        }
+
         /// <summary>
         /// 登录
         /// </summary>

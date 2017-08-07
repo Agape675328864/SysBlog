@@ -53,6 +53,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:SysTemBlogWebApi.Controllers.Blog_ArticleInfoController.ArticleCheckeds">
+            <summary>
+            更新主题浏览次数
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:SysTemBlogWebApi.Controllers.Blog_UserInfoController">
             <summary>
             

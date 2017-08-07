@@ -1,4 +1,5 @@
 ﻿using Jusfoun.YunCompany.Common;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,6 +22,7 @@ namespace SysTemBlogWebApi.Controllers
 
     public class Blog_ArticleInfoController : BaseController
     {
+
         /// <summary>
         /// 用户发帖
         /// </summary>
@@ -30,8 +32,8 @@ namespace SysTemBlogWebApi.Controllers
         public ResultBase BlogArticleAdd()
         {
             ResultBase model = new ResultBase();
-            string  Title = RequestContent["Title"] ?? "", Content = RequestContent["Content"] ?? "";
-            if (string.IsNullOrEmpty(Title) && !string.IsNullOrEmpty(Content))
+            string Title = RequestContent["Title"] ?? "", Content = RequestContent["Content"] ?? "", TypeName = RequestContent["TypeName"] ?? "", TypeId = RequestContent["TypeId"] ?? "0";
+            if (string.IsNullOrEmpty(Title) && !string.IsNullOrEmpty(Content) && !string.IsNullOrEmpty(TypeName))
             {
                 List<B_UserInfo> ListUserInfo = B_UserInfo_Provider.GetUserInfoListById(B_UserInfoBase.Id.ToString());
                 if (ListUserInfo.Count > 0)
@@ -94,12 +96,10 @@ namespace SysTemBlogWebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public ArticleRoot GetArticleListInfo()
+        public ListResultBase GetArticleListInfo()
         {
 
-            ArticleRoot ArticleRootModel = new ArticleRoot();
-            ArticleRootModel.ArticleInfoList = new List<ArticleInfo>();
-            ArticleRootModel.ResultBase = new ResultBase();
+            ListResultBase ArticleRootModel = new ListResultBase();
             string PageIndex = RequestContent["PageIndex"] ?? "1";
             string PageSize = RequestContent["PageSize"] ?? "10";
             string UserId = RequestContent["Id"] ?? "0";
@@ -110,40 +110,42 @@ namespace SysTemBlogWebApi.Controllers
                 int PIndex = (Tool.ToInt(PageSize) * (Tool.ToInt(PageIndex) - 1) + 1);
                 int PSize = Tool.ToInt(PageIndex) * Tool.ToInt(PageSize);
                 Tuple<List<B_Article>, int> ListArticle = B_Article_Provider.GetArticleList(PIndex, PSize, fiter);
-                if (ListArticle.Item1.Count > 0)
-                {
-                    foreach (var item in ListArticle.Item1)
-                    {
-                        ArticleInfo ArticleInfoModel = new ArticleInfo();
-                        ArticleInfoModel.Id = item.Id;
-                        ArticleInfoModel.Title = item.Title;
-                        // ArticleInfoModel.Content = item.Content;
-                        ArticleInfoModel.Picture = Consts.ArticlePath + item.Picture;
-                        ArticleInfoModel.CreateTime = item.CreateTime?.ToString("yyyy-MM-dd HH:mm:ss");
-                        ArticleInfoModel.Check = item.Check;
-                        ArticleRootModel.ArticleInfoList.Add(ArticleInfoModel);
-                    }
-                    ArticleRootModel.Count = ListArticle.Item2;
-                    ArticleRootModel.ResultBase.Msg = "获取成功";
-                    ArticleRootModel.ResultBase.Result = ResultCode.Ok;
-                }
-                else
-                {
-                    ArticleInfo ArticleInfoModel = new ArticleInfo();
-                    ArticleInfoModel.Id = 0;
-                    ArticleInfoModel.Title = "";
-                    // ArticleInfoModel.Content = "";
-                    ArticleInfoModel.Picture = "";
-                    ArticleRootModel.ArticleInfoList.Add(ArticleInfoModel);
-                    ArticleRootModel.Count = 0;
-                    ArticleRootModel.ResultBase.Msg = "获取成功";
-                    ArticleRootModel.ResultBase.Result = ResultCode.Ok;
-                }
+                var VarArticle = from a in ListArticle.Item1
+                                 select a.Id;
+                string ArticleIds = string.Join(",", VarArticle.ToArray());
+                var VarUser = from a in ListArticle.Item1
+                              select a.UserId;
+                string UserIds = string.Join(",", VarUser.ToArray());
+                List<B_RepliesArticle> RList = B_Article_Provider.RepliesArticleListByArticleid(ArticleIds);
+                List<B_UserInfo> UserInfoList = B_UserInfo_Provider.GetUserInfoListUserIds(UserIds);
+                var result = from a in ListArticle.Item1
+                             join b in UserInfoList on a.UserId equals b.Id into bb
+                             from c in bb.DefaultIfEmpty()
+                             select new
+                             {
+                                 a.Id,
+                                 a.Title,
+                                 a.Content,
+                                 CreateTime = a.CreateTime?.ToString("yyyy-MM-dd HH:mm:ss"),
+                                 a.Check,
+                                 c.NickName,
+                                 TypeName = a.TypeName,
+                                 Photo = Consts.UserPhotoPath + c.Photo,
+                                 RepliesCount = RList.FindAll(s => s.ArticleId.Equals(a.Id)) == null ? 0 : RList.FindAll(s => s.ArticleId.Equals(a.Id)).Count,
+
+                             };
+                List<ArticleInfo> B_UserInfoJsonList = JsonConvert.DeserializeObject<List<ArticleInfo>>(JsonConvert.SerializeObject(result));
+                ArticleRootModel.Count = ListArticle.Item2;
+                ArticleRootModel.ListData = B_UserInfoJsonList;
+                ArticleRootModel.Result = ResultCode.Ok;
+                ArticleRootModel.Msg = "√";
             }
             catch (Exception ex)
             {
-                ArticleRootModel.ResultBase.Msg = "获取失败";
-                ArticleRootModel.ResultBase.Result = ResultCode.ServerError;
+                ArticleRootModel.Count = 0;
+                ArticleRootModel.ListData = "";
+                ArticleRootModel.Result = ResultCode.ServerError;
+                ArticleRootModel.Msg = "异常";
             }
             return ArticleRootModel;
         }
@@ -153,30 +155,78 @@ namespace SysTemBlogWebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public ArticleModel GetArticleModelInfo()
+        public ListResultBase GetArticleModelInfo()
         {
             string Id = RequestContent["Id"] ?? "0";
-            ArticleModel Model = new ArticleModel();
-            Model.B_Article = new B_Article();
-            Model.ResultBase = new ResultBase();
+            ListResultBase ArticleRootModel = new ListResultBase();
             try
             {
                 List<B_Article> list = B_Article_Provider.ArticleList(Tool.ToInt(Id));
-                Model.ResultBase.Msg = "获取成功";
-                Model.ResultBase.Result = ResultCode.Ok;
-                if (list.Count > 0)
-                {
-                    Model.B_Article = list.FirstOrDefault();
-                    Model.B_Article.Picture = Consts.ArticlePath + Model.B_Article.Picture;
-                }
+                var VarArticle = from a in list
+                                 select a.Id;
+                string ArticleIds = string.Join(",", VarArticle.ToArray());
+                var VarUser = from a in list
+                              select a.UserId;
+                string UserIds = string.Join(",", VarUser.ToArray());
+                List<B_RepliesArticle> RList = B_Article_Provider.RepliesArticleListByArticleid(ArticleIds);
+                List<B_UserInfo> UserInfoList = B_UserInfo_Provider.GetUserInfoListUserIds(UserIds);
+                var result = from a in list
+                             join b in UserInfoList on a.UserId equals b.Id into bb
+                             from c in bb.DefaultIfEmpty()
+                             select new
+                             {
+                                 a.Id,
+                                 a.Title,
+                                 a.Content,
+                                 CreateTime = a.CreateTime?.ToString("yyyy-MM-dd HH:mm:ss"),
+                                 a.Check,
+                                 c.NickName,
+                                 TypeName = a.TypeName,
+                                 Photo = Consts.UserPhotoPath + c.Photo,
+                                 RepliesCount = RList.FindAll(s => s.ArticleId.Equals(a.Id)) == null ? 0 : RList.FindAll(s => s.ArticleId.Equals(a.Id)).Count
+                             };
+                List<ArticleInfo> B_UserInfoJsonList = JsonConvert.DeserializeObject<List<ArticleInfo>>(JsonConvert.SerializeObject(result));
+                ArticleRootModel.Count = 0;
+                ArticleRootModel.ListData = B_UserInfoJsonList.FirstOrDefault();
+                ArticleRootModel.Result = ResultCode.Ok;
+                ArticleRootModel.Msg = "√";
             }
             catch (Exception ex)
             {
-
-                Model.ResultBase.Result = ResultCode.ServerError;
-                Model.ResultBase.Msg = "失败异常";
+                ArticleRootModel.Count = 0;
+                ArticleRootModel.ListData = "";
+                ArticleRootModel.Result = ResultCode.ServerError;
+                ArticleRootModel.Msg = "异常";
             }
-            return Model;
+            return ArticleRootModel;
+        }
+        /// <summary>
+        /// 更新主题浏览次数
+        /// </summary>
+        /// <returns></returns>
+        public ArticleBrowseTimes ArticleCheckeds()
+        {
+            ArticleBrowseTimes ArticleBrowseTimes = new ArticleBrowseTimes();
+            string Id = RequestContent["Id"] ?? "0";
+            ResultBase model = new ResultBase();
+            try
+            {
+                ArticleBrowseTimes.TotalCount = B_Article_Provider.UpdateAritcleCheckTimes(int.Parse(Id));
+                ArticleBrowseTimes.Result = ResultCode.Ok;
+                ArticleBrowseTimes.Msg = "成功";
+                //json = JsonConvert.SerializeObject(new
+                //{
+                //    count = B_Article_Provider.UpdateAritcleCheckTimes(int.Parse(Id)),
+                //    data = model
+                //});
+            }
+            catch (Exception)
+            {
+                ArticleBrowseTimes.TotalCount = 0;
+                ArticleBrowseTimes.Result = ResultCode.ServerError;
+                ArticleBrowseTimes.Msg = "失败";
+            }
+            return ArticleBrowseTimes;
         }
     }
 }

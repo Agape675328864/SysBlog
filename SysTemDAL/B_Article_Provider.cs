@@ -34,18 +34,24 @@ namespace SysTemDAL
                            ([UserId]
                            ,[Title]
                            ,[Content]
-                           ,[Picture])
+                           ,[Picture]
+                           ,[TypeName]
+                           ,[TypeId])
                      VALUES
                            (@UserId
                            ,@Title
                            ,@Content
-                           ,@Picture)";
+                           ,@Picture
+                           ,@TypeName
+                           ,@TypeId)";
 
             SqlParameter[] param = {
                                   new SqlParameter("@UserId",model.UserId),
                                   new SqlParameter("@Title",model.Title),
                                   new SqlParameter("@Content",model.Content),
-                                  new SqlParameter("@Picture",model.Picture)
+                                  new SqlParameter("@Picture",model.Picture),
+                                  new SqlParameter("@Content",model.TypeName),
+                                  new SqlParameter("@Picture",model.TypeId)
                                   };
             return DBHelperDao.ExecuteNonQuery(sql, param) > 0;
         }
@@ -122,7 +128,7 @@ namespace SysTemDAL
             return DBHelperDao.GetList<B_Article>(sql, new SqlParameter("@Id", Id));
         }
         /// <summary>
-        /// 当前用户id获取所以主题发帖信息
+        /// 当前用户id获取所有主题发帖信息
         /// </summary>
         /// <param name="UserId"></param>
         /// <returns></returns>
@@ -131,6 +137,8 @@ namespace SysTemDAL
             string sql = "SELECT * FROM dbo.B_Article WHERE UserId in (" + ItemIds + ")";
             return DBHelperDao.GetList<B_Article>(sql, null);
         }
+
+
         /// <summary>
         /// 获取当前用户回帖信息
         /// </summary>
@@ -139,6 +147,17 @@ namespace SysTemDAL
         public static List<B_RepliesArticle> RepliesArticleList(string ItemIds)
         {
             string sql = "SELECT * FROM dbo.B_RepliesArticle WHERE UserId in (" + ItemIds + ")";
+            return DBHelperDao.GetList<B_RepliesArticle>(sql, null);
+        }
+
+        /// <summary>
+        /// 根据主题id获取评论主题的信息
+        /// </summary>
+        /// <param name="ItemIds"></param>
+        /// <returns></returns>
+        public static List<B_RepliesArticle> RepliesArticleListByArticleid(string ArticleIds)
+        {
+            string sql = "SELECT * FROM dbo.B_RepliesArticle WHERE ArticleId in (" + ArticleIds + ")";
             return DBHelperDao.GetList<B_RepliesArticle>(sql, null);
         }
         /// <summary>
@@ -156,6 +175,23 @@ namespace SysTemDAL
                                      new SqlParameter("@State",model.State)
                                    };
             return DBHelperDao.ExecuteNonQuery(sql, param) > 0;
+        }
+        /// <summary>
+        /// 修改文章浏览次数
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static int UpdateAritcleCheckTimes(int Id)
+        {
+            string sql = @"UPDATE [dbo].[B_Article]
+                           SET [CheckTimes] = [CheckTimes]+1
+                           WHERE Id=@Id";
+            SqlParameter[] param ={
+                                     new SqlParameter("@Id",Id)
+                                   };
+            DBHelperDao.ExecuteNonQuery(sql, param);
+            string TotalSql = "SELECT CheckTimes FROM dbo.B_Article WHERE Id=@Id";
+            return DBHelperDao.ExecuteScalar(TotalSql, param) == null ? 0 : int.Parse(DBHelperDao.ExecuteScalar(TotalSql, param).ToString());
         }
         /// <summary>
         /// 修改回帖显示状态

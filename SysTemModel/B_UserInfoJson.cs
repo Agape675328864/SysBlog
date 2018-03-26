@@ -10,7 +10,7 @@ namespace SysTemModel
     {
         public int Id { get; set; }
         /// <summary>
-        /// 昵称用户名
+        /// 昵称用户名1
         /// </summary>
         public string NickName { get; set; }
         /// <summary>

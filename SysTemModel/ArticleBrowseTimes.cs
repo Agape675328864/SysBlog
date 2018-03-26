@@ -9,7 +9,7 @@ namespace SysTemModel
     public class ArticleBrowseTimes : ResultModel.ResultBase
     {
         /// <summary>
-        /// 浏览次数1
+        /// 浏览次数
         /// </summary>
         public int TotalCount { get; set; }
     }
